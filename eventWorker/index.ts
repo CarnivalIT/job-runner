@@ -1,8 +1,8 @@
-import cron from 'node-cron';
+﻿import cron from 'node-cron';
 // --- Cron Schedules ---
-import updateDimentions from './src/tasks/updateDimentions';
-import updateInventory from './src/tasks/updateInventory';
+import updateInventory from './src/tasks/updateInventory.js';
 
+console.log('🚀 Event Worker initialized.');
 /**
  *  Schedule format reference:
  *  * * * * * *
@@ -13,16 +13,9 @@ import updateInventory from './src/tasks/updateInventory';
  *  | | hour
  *  | minute
  *  second (optional)
- */
+*/
 
 //Runs at 7:00 AM and 12:00 PM, Monday through Friday
 cron.schedule('0 7,12 * * 1-5', () => {
-  updateInventory();
+  updateInventory().catch(err => console.error('Cron updateInventory failed:', err));
 });
-
-//Runs at 12:30 AM, Monday
-cron.schedule('30 0 * * 1', () => {
-  updateDimentions();
-});
-
-console.log('🚀 Event Worker initialized and crons scheduled.');
