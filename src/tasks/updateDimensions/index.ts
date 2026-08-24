@@ -11,7 +11,7 @@ export async function runUpdateDimensions(): Promise<void> {
 
   let pool: mssql.ConnectionPool | undefined;
   try {
-    pool = await createConnectionPool('COL');
+    pool = await createConnectionPool('CTRLINVENT');
 
     const result = await pool.query(`
       SELECT DISPLAYPRODUCTNUMBER

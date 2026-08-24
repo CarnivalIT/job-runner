@@ -100,7 +100,7 @@ async function extractOrders(): Promise<{ result: SyncResult; orders: ExtractedO
   logger.info('[logbookUpdateDB] Extracting Orders (AX)...');
   let pool: mssql.ConnectionPool | undefined;
   try {
-    pool = await createConnectionPool('AX');
+    pool = await createConnectionPool('CTRLINVENT');
     const result = await pool.request().query(QUERIES.ORDERS);
     const data = result.recordset as ExtractedOrder[];
     const syncResult = await pushToApi('/orders', data);
@@ -123,7 +123,7 @@ async function extractOrderDetail(oeiIds: string[]): Promise<SyncResult> {
 
   let pool: mssql.ConnectionPool | undefined;
   try {
-    pool = await createConnectionPool('SQL');
+    pool = await createConnectionPool('CTRLINVENT');
 
     for (let b = 0; b < batches.length; b++) {
       const batch = batches[b];
@@ -168,7 +168,7 @@ async function extractOrderStatus(salesOrderIds: string[]): Promise<SyncResult> 
 
   let pool: mssql.ConnectionPool | undefined;
   try {
-    pool = await createConnectionPool('AX');
+    pool = await createConnectionPool('CTRLINVENT');
 
     for (let b = 0; b < batches.length; b++) {
       const batch = batches[b];
