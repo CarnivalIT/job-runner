@@ -8,12 +8,12 @@ import type { RawInventoryItem, InventoryPayloadItem } from './types.js';
 export async function runUpdateInventory(): Promise<void> {
   const startTime = new Date();
   logger.info('[updateInventory] Starting inventory synchronization...');
-  
+
   let pool: mssql.ConnectionPool | undefined;
   try {
     pool = await createConnectionPool('CTRLINVENT');
-    
-    const result = await pool.query(`
+
+    const result = await pool.query<RawInventoryItem>(`
       SELECT [ESTILO]
             ,[DESCRIPCION]
             ,[COLOR]
@@ -22,11 +22,10 @@ export async function runUpdateInventory(): Promise<void> {
             ,[CALIDAD]
             ,[DISPONIBLE]
             ,[RESERVA]
-            ,[FISICO]
       FROM CCVW_INVENMAYV3
     `);
 
-    const recordset = (result as { recordset: RawInventoryItem[] }).recordset;
+    const recordset = result.recordset;
     logger.info(`[updateInventory] Fetched ${recordset.length} inventory records from database.`);
 
     const payload: InventoryPayloadItem[] = recordset.map((item) => ({
@@ -65,8 +64,13 @@ export async function runUpdateInventory(): Promise<void> {
       logger.warn(`[updateInventory] Completed with status ${inventoryResponse.status}.`);
     }
   } catch (err) {
-    logger.error('[updateInventory] Task encountered an error:', err);
-    logger.logToFile('updateInventory', `Date: ${new Date().toString()} ,Error: ${err}`);
+    if (axios.isAxiosError(err)) {
+      logger.error('[updateInventory] Task encountered an axios error:', err.response?.data);
+      logger.logToFile('updateInventory', `Date: ${new Date().toString()} ,Error: ${err.response?.data}`);
+    } else {
+      logger.error('[updateInventory] Task encountered an unknown error:', err);
+      logger.logToFile('updateInventory', `Date: ${new Date().toString()} ,Error: ${err}`);
+    }
     throw err;
   } finally {
     if (pool) {
