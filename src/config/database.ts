@@ -9,41 +9,17 @@ const commonConfig: Partial<mssql.config> = {
   },
 };
 
-export type DatabaseTarget = 'CTRL' | 'COL' | 'AX' | 'SQL';
+export type DatabaseTarget = 'CTRLINVENT';
 
 export function getDatabaseConfig(target: DatabaseTarget): mssql.config {
   switch (target) {
-    case 'CTRL':
+    case 'CTRLINVENT':
       return {
         ...commonConfig,
-        user: ENV.DB.USER,
-        password: ENV.DB.PASSWORD,
-        server: ENV.DB.SERVER_211,
-        database: ENV.DB.DATABASE_CTRL,
-      };
-    case 'COL':
-      return {
-        ...commonConfig,
-        user: ENV.DB.USER,
-        password: ENV.DB.PASSWORD,
-        server: ENV.DB.SERVER_211,
-        database: ENV.DB.DATABASE_COL,
-      };
-    case 'AX':
-      return {
-        ...commonConfig,
-        user: ENV.DB.USER,
-        password: ENV.DB.PASSWORD,
-        server: ENV.DB.SERVER_AX,
-        database: ENV.DB.DATABASE_AX,
-      };
-    case 'SQL':
-      return {
-        ...commonConfig,
-        user: ENV.DB.USER,
-        password: ENV.DB.PASSWORD,
-        server: ENV.DB.SERVER_SQL,
-        database: ENV.DB.DATABASE_SQL,
+        user: ENV.DB.CTRL_DB_USER,
+        password: ENV.DB.CTRL_DB_PASSWORD,
+        server: ENV.DB.CTRL_DB_SERVER,
+        database: ENV.DB.CTRL_DB_DATABASE,
       };
   }
 }

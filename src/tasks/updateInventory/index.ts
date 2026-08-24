@@ -11,7 +11,7 @@ export async function runUpdateInventory(): Promise<void> {
   
   let pool: mssql.ConnectionPool | undefined;
   try {
-    pool = await createConnectionPool('CTRL');
+    pool = await createConnectionPool('CTRLINVENT');
     
     const result = await pool.query(`
       SELECT [ESTILO]

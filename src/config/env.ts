@@ -6,8 +6,10 @@ export const ENV = {
 
   // Database Credentials
   DB: {
-    USER: process.env.DB_USER || 'root',
-    PASSWORD: process.env.DB_PASSWORD || '',
+    CTRL_DB_USER: process.env.CTRL_DB_USER || 'root',
+    CTRL_DB_PASSWORD: process.env.CTRL_DB_PASSWORD || '',
+    CTRL_DB_SERVER: process.env.CTRL_DB_SERVER || 'localhost',
+    CTRL_DB_DATABASE: process.env.CTRL_DB_DATABASE || 'test',
 
     // Server 211 (Inventory / Dimensions)
     SERVER_211: process.env.DB_SERVER_211 || 'localhost',
@@ -25,7 +27,7 @@ export const ENV = {
 
   // API Endpoints
   API: {
-    STYLES_BASE_URL: process.env.STYLES_API_BASE_URL || 'https://carnivaldevelop.ddns.net/stylesInformation/api',
+    STYLES_BASE_URL: process.env.STYLES_API_BASE_URL || 'http://localhost:3000/stylesInformation/api',
     
     LIVEDASH_SOURCE_URL: process.env.LIVEDASH_SOURCE_URL || 'http://170.1.1.10:8012',
     LIVEDASH_TARGET_URL: process.env.LIVEDASH_TARGET_URL || 'http://localhost:3000/api/livedash',
