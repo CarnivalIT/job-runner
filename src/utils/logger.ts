@@ -15,15 +15,15 @@ export const logger = {
   },
 
   warn(message: string, ...args: unknown[]): void {
-    console.warn(`[${new Date().toISOString()}] ⚠️ [WARN] ${message}`, ...args);
+    console.warn(`[${new Date().toISOString()}] [WARN] ${message}`, ...args);
   },
 
   error(message: string, ...args: unknown[]): void {
-    console.error(`[${new Date().toISOString()}] ❌ [ERROR] ${message}`, ...args);
+    console.error(`[${new Date().toISOString()}] [ERROR] ${message}`, ...args);
   },
 
   success(message: string, ...args: unknown[]): void {
-    console.log(`[${new Date().toISOString()}] ✅ [SUCCESS] ${message}`, ...args);
+    console.log(`[${new Date().toISOString()}] [SUCCESS] ${message}`, ...args);
   },
 
   /**

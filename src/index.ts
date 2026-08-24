@@ -3,7 +3,7 @@ import { startScheduler, stopScheduler } from './scheduler/index.js';
 import { logger } from './utils/logger.js';
 
 console.log('====================================================');
-console.log('   🚀 CARNIVAL JOB RUNNER (DATA SYNC SERVICE)');
+console.log('JOB RUNNER');
 console.log('====================================================');
 logger.info(`Starting process in ${process.env.NODE_ENV || 'development'} mode (PID: ${process.pid})`);
 

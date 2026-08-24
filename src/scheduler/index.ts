@@ -14,7 +14,7 @@ const activeTasks: RunningTask[] = [];
  */
 export function startScheduler(): void {
   logger.info('----------------------------------------------------');
-  logger.info('   🕒 INITIALIZING CARNIVAL CRON MANAGER');
+  logger.info(' INITIALIZING CRON MANAGER');
   logger.info('----------------------------------------------------');
 
   const enabledJobs = SCHEDULED_JOBS.filter((job) => job.enabled);
@@ -35,33 +35,31 @@ export function startScheduler(): void {
       continue;
     }
 
-    logger.info(`📅 Registering [${job.id}] "${job.name}" => Cron: "${job.cronExpression}"`);
+    logger.info(`Registering [${job.id}] "${job.name}" => Cron: "${job.cronExpression}"`);
 
     const scheduledTask = cron.schedule(job.cronExpression, async () => {
-      logger.info(`▶️ Triggering scheduled job [${job.id}] (${job.name})...`);
+      logger.info(`Triggering scheduled job [${job.id}] (${job.name})...`);
       const jobStart = Date.now();
       try {
         await job.run();
         const duration = ((Date.now() - jobStart) / 1000).toFixed(2);
-        logger.success(`🏁 Finished scheduled job [${job.id}] in ${duration}s.`);
+        logger.success(`Finished scheduled job [${job.id}] in ${duration}s.`);
       } catch (err) {
         const duration = ((Date.now() - jobStart) / 1000).toFixed(2);
-        logger.error(`💥 Scheduled job [${job.id}] failed after ${duration}s:`, err);
+        logger.error(`Scheduled job [${job.id}] failed after ${duration}s:`, err);
       }
     });
 
     activeTasks.push({ job, task: scheduledTask });
   }
 
-  logger.info(`🚀 Scheduler running with ${activeTasks.length} active cron jobs.`);
+  logger.info(`Scheduler running with ${activeTasks.length} active cron jobs.`);
   logger.info('----------------------------------------------------\n');
 }
 
-/**
- * Stops all active cron tasks for graceful shutdown
- */
+// Stops all active cron tasks for graceful shutdown
 export function stopScheduler(): void {
-  logger.info('🛑 Stopping all active cron schedules...');
+  logger.info('Stopping all active cron schedules...');
   for (const { job, task } of activeTasks) {
     task.stop();
     logger.info(`   - Stopped job [${job.id}]`);
