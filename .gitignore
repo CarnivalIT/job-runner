@@ -141,3 +141,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Task Local Data Catalogs
+src/tasks/*/data/*.csv
+!src/tasks/*/data/.gitkeep

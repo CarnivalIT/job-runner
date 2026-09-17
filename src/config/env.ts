@@ -35,5 +35,8 @@ export const ENV = {
 
     SYNC_BASE_URL: process.env.SYNC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/sync`,
     SYNC_API_KEY: process.env.SYNC_API_KEY || 'your-sync-api-key',
+
+    STYLES_AGE_URL: process.env.STYLES_AGE_API_URL || 'http://localhost:3000/api/inventory/styles-age',
+    STYLES_AGE_TOKEN: process.env.STYLES_AGE_API_TOKEN || process.env.API_AUTH_TOKEN || 'carnival-styles-age-super-secret-token',
   }
 } as const;

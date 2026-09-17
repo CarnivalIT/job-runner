@@ -2,6 +2,7 @@ import { runUpdateInventory } from '../tasks/updateInventory/index.js';
 import { runUpdateDimensions } from '../tasks/updateDimensions/index.js';
 import { runLivedashPush } from '../tasks/livedashPush/index.js';
 import { runLogbookUpdateDB } from '../tasks/logbookUpdateDB/index.js';
+import { runStylesAge } from '../tasks/stylesAge/index.js';
 
 export interface ScheduledJob {
   id: string;
@@ -45,4 +46,13 @@ export const SCHEDULED_JOBS: ScheduledJob[] = [
   //   enabled: false, // Set to true when ready to enable in scheduler
   //   run: runLogbookUpdateDB,
   // },
+  {
+    id: 'styles-age',
+    name: 'Styles Age Calculation',
+    cronExpression: '0 22 * * 5', // Every Friday at 10:00 PM
+    description: 'Calculates style inventory aging from first entry cascade and enriches with CSV catalog',
+    enabled: false, // Standby until target API is active
+    run: runStylesAge,
+  },
 ];
+

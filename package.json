@@ -18,7 +18,8 @@
     "task:inventory": "tsx src/tasks/updateInventory/cli.ts",
     "task:dimensions": "tsx src/tasks/updateDimensions/cli.ts",
     "task:livedash": "tsx src/tasks/livedashPush/cli.ts",
-    "task:logbook": "tsx src/tasks/logbookUpdateDB/cli.ts"
+    "task:logbook": "tsx src/tasks/logbookUpdateDB/cli.ts",
+    "task:styles-age": "tsx src/tasks/stylesAge/cli.ts"
   },
   "keywords": [
     "cron",

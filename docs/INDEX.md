@@ -26,10 +26,11 @@ graph TD
         T2["TASK-02: updateDimensions<br/>(Cron: 0 6 * * 1-5)"]
         T3["TASK-03: livedashPush<br/>(Cron: */15 8-19 * * 1-5)"]
         T4["TASK-04: logbookUpdateDB<br/>(Cron: 0 13,19 * * 1-5)"]
+        T5["TASK-05: stylesAge<br/>(Cron: 0 22 * * 5)"]
     end
 
     subgraph Storage ["Data Sources (MSSQL / HTTP)"]
-        MSSQL_CTRL[("CTRLINVENT<br/>CCVW_INVENMAYV3")]
+        MSSQL_CTRL[("CTRLINVENT<br/>CCVW_INVENMAYV3 / inventsum")]
         MSSQL_AX[("Dynamics AX<br/>ECORESPRODUCT / OVS / SALESTABLE")]
         MSSQL_LOCAL[("SeguimientoPedidos<br/>DetalleOrdenEnvio")]
         HTTP_LOCAL["Local Metrics Source<br/>(http://170.1.1.10:8012)"]
@@ -39,32 +40,38 @@ graph TD
         API_STYLES["Styles API<br/>(/inventory/fill, /style/sizes, /style/colors)"]
         API_LIVEDASH["LiveDash Central API<br/>(/api/livedash)"]
         API_SYNC["Courier Sync API<br/>(/orders, /order-detail, /order-status)"]
+        API_STYLES_AGE["Styles Age API<br/>(STYLES_AGE_API_URL)"]
     end
 
     SCHED -.->|Triggers| T1
     SCHED -.->|Triggers| T2
     SCHED -.->|Triggers| T3
     SCHED -.->|Triggers| T4
+    SCHED -.->|Triggers| T5
 
     DB ==>|Injects Pool| T1
     DB ==>|Injects Pool| T2
     DB ==>|Injects Pool| T4
+    DB ==>|Injects Pool| T5
 
     T1 --- MSSQL_CTRL
     T2 --- MSSQL_AX
     T3 --- HTTP_LOCAL
     T4 --- MSSQL_AX
     T4 --- MSSQL_LOCAL
+    T5 --- MSSQL_CTRL
 
     T1 ==>|POST| API_STYLES
     T2 ==>|POST| API_STYLES
     T3 ==>|POST| API_LIVEDASH
     T4 ==>|POST| API_SYNC
+    T5 ==>|POST| API_STYLES_AGE
 
     T1 -.->|Appends| LOG
     T2 -.->|Appends| LOG
     T3 -.->|Appends| LOG
     T4 -.->|Appends| LOG
+    T5 -.->|Appends| LOG
 ```
 
 ---
@@ -78,7 +85,7 @@ Use this registry to immediately jump to the exact specification you need.
 | Node ID | Subsystem Name | Primary Files | Upstream / Driver | Downstream Consumers |
 | :--- | :--- | :--- | :--- | :--- |
 | [ARCH-01](file:///home/osvaldev/Documents/carnival/job-runner/docs/arch/ARCH-01-SCHEDULER.md) | **Scheduler & Process Lifecycle** | [`src/index.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/index.ts)<br>[`src/scheduler/*`](file:///home/osvaldev/Documents/carnival/job-runner/src/scheduler/index.ts) | Node.js, `node-cron`, PM2 | All tasks in `src/tasks/*` |
-| [ARCH-02](file:///home/osvaldev/Documents/carnival/job-runner/docs/arch/ARCH-02-DATABASE.md) | **MSSQL Database Engine** | [`src/config/database.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/config/database.ts)<br>[`src/config/env.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/config/env.ts) | `mssql` pool driver | `TASK-01`, `TASK-02`, `TASK-04` |
+| [ARCH-02](file:///home/osvaldev/Documents/carnival/job-runner/docs/arch/ARCH-02-DATABASE.md) | **MSSQL Database Engine** | [`src/config/database.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/config/database.ts)<br>[`src/config/env.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/config/env.ts) | `mssql` pool driver | `TASK-01`, `TASK-02`, `TASK-04`, `TASK-05` |
 | [ARCH-03](file:///home/osvaldev/Documents/carnival/job-runner/docs/arch/ARCH-03-LOGGING.md) | **Logging & Audit Subsystem** | [`src/utils/logger.ts`](file:///home/osvaldev/Documents/carnival/job-runner/src/utils/logger.ts) | Node `fs`, `console` | All tasks and scheduler |
 
 ### Task Specification Nodes (`docs/tasks/`)
@@ -89,6 +96,7 @@ Use this registry to immediately jump to the exact specification you need.
 | [TASK-02](file:///home/osvaldev/Documents/carnival/job-runner/docs/tasks/TASK-02-UPDATE-DIMENSIONS.md) | **Product Dimensions & Sizing** | Standby | `0 6 * * 1-5` | [`src/tasks/updateDimensions/*`](file:///home/osvaldev/Documents/carnival/job-runner/src/tasks/updateDimensions/index.ts) | `STYLES_API_BASE_URL/style/sizes`, `/colors` |
 | [TASK-03](file:///home/osvaldev/Documents/carnival/job-runner/docs/tasks/TASK-03-LIVEDASH-PUSH.md) | **LiveDash Metrics Push** | Standby | `*/15 8-19 * * 1-5` | [`src/tasks/livedashPush/*`](file:///home/osvaldev/Documents/carnival/job-runner/src/tasks/livedashPush/index.ts) | `LIVEDASH_TARGET_URL` |
 | [TASK-04](file:///home/osvaldev/Documents/carnival/job-runner/docs/tasks/TASK-04-LOGBOOK-SYNC.md) | **The Courier (Orders & Logistics)** | Standby | `0 13,19 * * 1-5` | [`src/tasks/logbookUpdateDB/*`](file:///home/osvaldev/Documents/carnival/job-runner/src/tasks/logbookUpdateDB/index.ts) | `SYNC_API_URL/orders`, `/order-detail`, `/order-status` |
+| [TASK-05](file:///home/osvaldev/Documents/carnival/job-runner/docs/tasks/TASK-05-STYLES-AGE.md) | **Styles Age Calculation** | Standby | `0 22 * * 5` | [`src/tasks/stylesAge/*`](file:///home/osvaldev/Documents/carnival/job-runner/src/tasks/stylesAge/index.ts) | `STYLES_AGE_API_URL` |
 
 ---
 
@@ -103,6 +111,7 @@ All cron intervals operate in the local server timezone during regular Mexican w
 12:00 PM  ──► [TASK-01] Update Inventory (Midday stock refresh)
 01:00 PM  ──► [TASK-04] The Courier Sync (Midday orders, tracking & packing progress)
 07:00 PM  ──► [TASK-04] The Courier Sync (End-of-day orders & invoice reconciliation)
+10:00 PM  ──► [TASK-05] Styles Age Calculation (Weekly Friday stock aging)
 ```
 
 ---
