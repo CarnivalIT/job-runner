@@ -51,7 +51,7 @@ export const SCHEDULED_JOBS: ScheduledJob[] = [
     name: 'Styles Age Calculation',
     cronExpression: '0 22 * * 5', // Every Friday at 10:00 PM
     description: 'Calculates style inventory aging from first entry cascade and enriches with CSV catalog',
-    enabled: false, // Standby until target API is active
+    enabled: true,
     run: runStylesAge,
   },
 ];
