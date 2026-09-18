@@ -3,7 +3,7 @@ id: "TASK-05"
 title: "Styles Age Calculation & Inventory Aging"
 type: "task"
 status: "standby"
-schedule: "0 22 * * 5" # Every Friday at 10:00 PM
+schedule: "0 22 * * 1-5" # Every Monday to Friday at 10:00 PM
 code_files:
   - "src/tasks/stylesAge/index.ts"
   - "src/tasks/stylesAge/cli.ts"
@@ -22,8 +22,8 @@ downstream:
 `stylesAge` extracts active warehouse inventory from `CTRLINVENT` (`ColeccionIntima.dbo.inventsum` and `inventdim`), determines the first warehouse entry date (`firstEntry`) for each batch/serial using a 4-step sequential fallback cascade (Forma 1 -> Forma 2 -> Forma 3 -> Forma 4), enriches records with style description, color description, and cost from a local CSV catalog, and dispatches the payload to an external API for aging categorization and reporting.
 
 ## 2. Scheduling & Execution
-- **Cron Schedule**: `0 22 * * 5` (Every Friday at 10:00 PM)
-- **Status**: Standby (`enabled: false`)
+- **Cron Schedule**: `0 22 * * 1-5` (Every Monday to Friday at 10:00 PM)
+- **Status**: `enabled: true`
 - **CLI Command**: `npm run task:styles-age`
 - **Direct Entry**: `tsx src/tasks/stylesAge/cli.ts`
 

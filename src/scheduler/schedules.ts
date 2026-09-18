@@ -49,7 +49,7 @@ export const SCHEDULED_JOBS: ScheduledJob[] = [
   {
     id: 'styles-age',
     name: 'Styles Age Calculation',
-    cronExpression: '0 22 * * 5', // Every Friday at 10:00 PM
+    cronExpression: '0 22 * * 1-5', // Every Monday to Friday at 10:00 PM
     description: 'Calculates style inventory aging from first entry cascade and enriches with CSV catalog',
     enabled: true,
     run: runStylesAge,
