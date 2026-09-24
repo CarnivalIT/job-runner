@@ -30,14 +30,14 @@ export const SCHEDULED_JOBS: ScheduledJob[] = [
   //   enabled: true,
   //   run: runUpdateDimensions,
   // },
-  // {
-  //   id: 'livedash-push',
-  //   name: 'LiveDash Metrics Push',
-  //   cronExpression: '*/15 8-19 * * 1-5', // Mon-Fri every 15 minutes during working hours
-  //   description: 'Extracts AvanceOEI, EficienciaColaborador, and EficienciaOperacion metrics and pushes to LiveDash',
-  //   enabled: false, // Set to true when ready to enable in scheduler
-  //   run: runLivedashPush,
-  // },
+  {
+    id: 'livedash-push',
+    name: 'LiveDash Metrics Push',
+    cronExpression: '0 */2 * * 1-5', // Mon-Fri every 2 hours
+    description: 'Extracts AvanceOEI, EficienciaColaborador, and EficienciaOperacion metrics and pushes to LiveDash',
+    enabled: true, // Set to true when ready to enable in scheduler
+    run: runLivedashPush,
+  },
   // {
   //   id: 'logbook-sync',
   //   name: 'Logbook & Orders Sync (The Courier)',

@@ -2,8 +2,8 @@
 id: "TASK-03"
 title: "LiveDash Operational Metrics Push"
 type: "task"
-status: "standby"
-schedule: "*/15 8-19 * * 1-5" # Mon-Fri every 15 minutes (8:00 AM - 7:00 PM)
+status: "enabled"
+schedule: "0 */2 * * 1-5" # Mon-Fri every 2 hours
 code_files:
   - "src/tasks/livedashPush/index.ts"
   - "src/tasks/livedashPush/cli.ts"
@@ -19,13 +19,13 @@ downstream:
 # TASK-03: LiveDash Operational Metrics Push
 
 ## 1. Overview & Business Context
-The `livedashPush` worker extracts operational efficiency and packing progress indicators from the factory floor endpoint (Server B on local network `170.1.1.10:8012`) and pushes consolidated snapshots to the central LiveDash monitoring platform (Server A) every 15 minutes during operating hours.
+The `livedashPush` worker extracts operational efficiency and packing progress indicators from the factory floor endpoint (Server B on local network `170.1.1.10:8012`) and pushes consolidated snapshots to the central LiveDash monitoring platform (Server A) every 2 hours.
 
 ---
 
 ## 2. Scheduling & Execution
-- **Cron Schedule**: `*/15 8-19 * * 1-5` (Every 15 mins, Mon–Fri, 8 AM–7 PM)
-- **Status**: Standby (disabled in [src/scheduler/schedules.ts](file:///home/osvaldev/Documents/carnival/job-runner/src/scheduler/schedules.ts))
+- **Cron Schedule**: `0 */2 * * 1-5` (Every 2 hours, Mon–Fri)
+- **Status**: Enabled in [src/scheduler/schedules.ts](file:///home/osvaldev/Documents/carnival/job-runner/src/scheduler/schedules.ts)
 - **On-Demand CLI**: `npm run task:livedash`
 - **Direct Entrypoint**: `tsx src/tasks/livedashPush/cli.ts`
 
