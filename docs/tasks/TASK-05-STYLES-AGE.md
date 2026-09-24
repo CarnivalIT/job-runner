@@ -2,7 +2,7 @@
 id: "TASK-05"
 title: "Styles Age Calculation & Inventory Aging"
 type: "task"
-status: "standby"
+status: "active"
 schedule: "0 22 * * 1-5" # Every Monday to Friday at 10:00 PM
 code_files:
   - "src/tasks/stylesAge/index.ts"

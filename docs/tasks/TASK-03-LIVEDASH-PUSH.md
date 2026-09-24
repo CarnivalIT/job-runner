@@ -2,7 +2,7 @@
 id: "TASK-03"
 title: "LiveDash Operational Metrics Push"
 type: "task"
-status: "enabled"
+status: "active"
 schedule: "0 */2 * * 1-5" # Mon-Fri every 2 hours
 code_files:
   - "src/tasks/livedashPush/index.ts"
